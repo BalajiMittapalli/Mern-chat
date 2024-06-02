@@ -3,7 +3,7 @@ import User from '../models/userModel.js'
 
 const protectRoute =async(req,res,next)=>{
     try{
-        const token =req.header('Authorization').replace('Bearer ', '');
+        const token =req.cookies.jwt;
         if(!token){
             return res.status(401).json({error:"You are not authenticated"});
         }
