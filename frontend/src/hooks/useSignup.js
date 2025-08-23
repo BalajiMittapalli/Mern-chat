@@ -8,7 +8,7 @@ const useSignup = () => {
 
 	const signup = async ({ fullName, username, password, confirmPassword, gender }) => {
 		const success = handleInputErrors({ fullName, username, password, confirmPassword, gender });
-		if (!success) return;
+		if (!success) return false;
 
 		setLoading(true);
 		try {
@@ -23,10 +23,16 @@ const useSignup = () => {
 			if (data.error) {
 				throw new Error(data.error);
 			}
-			localStorage.setItem("chat-user", JSON.stringify(data));
-			setAuthUser(data);
+			
+			// Don't automatically log in the user after signup
+			// localStorage.setItem("chat-user", JSON.stringify(data));
+			// setAuthUser(data);
+			
+			toast.success("Account created successfully! Please login to continue.");
+			return true; // Return true to indicate successful signup
 		} catch (error) {
 			toast.error(error.message);
+			return false;
 		} finally {
 			setLoading(false);
 		}

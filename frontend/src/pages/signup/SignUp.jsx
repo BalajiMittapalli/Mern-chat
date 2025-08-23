@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GenderCheck from "./GenderCheck";
 import { useState } from "react";
 import useSignup from "../../hooks/useSignup";
@@ -13,6 +13,7 @@ const SignUp = () => {
 	});
 
 	const { loading, signup } = useSignup();
+	const navigate = useNavigate();
 
 	const handleCheckboxChange = (gender) => {
 		setInputs({ ...inputs, gender });
@@ -20,7 +21,21 @@ const SignUp = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		await signup(inputs);
+		const success = await signup(inputs);
+		if (success) {
+			// Reset form
+			setInputs({
+				fullName: "",
+				username: "",
+				password: "",
+				confirmPassword: "",
+				gender: "",
+			});
+			// Redirect to login page after successful signup
+			setTimeout(() => {
+				navigate("/login");
+			}, 1500); // Give time for the success toast to be visible
+		}
 	};
 
 	return (
